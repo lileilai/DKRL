@@ -104,75 +104,26 @@ with graph.as_default():
 
   # Ops and variables pinned to the CPU because of missing GPU implementation
   with tf.device('/cpu:0'):
-    # Look up embeddings for inputs.
-    # embeddings = tf.Variable(
-    #     tf.random_uniform([vocabulary_size, embedding_size], -1.0, 1.0))
-    # embed = tf.nn.embedding_lookup(embeddings, train_inputs)
-    #
-    # # Construct the variables for the NCE loss
-    # nce_weights = tf.Variable(
-    #     tf.truncated_normal([vocabulary_size, embedding_size],
-    #                         stddev=1.0 / math.sqrt(embedding_size)))
-    # nce_biases = tf.Variable(tf.zeros([vocabulary_size]))
+
+    embeddings = tf.Variable(
+           tf.random_uniform([vocabulary_size, embedding_size], -1.0, 1.0))
+    embed = tf.nn.embedding_lookup(embeddings, train_inputs)
+
+    nce_weights = tf.Variable(
+           tf.truncated_normal([vocabulary_size, embedding_size],
+                               stddev=1.0 / math.sqrt(embedding_size)))
+    nce_biases = tf.Variable(tf.zeros([vocabulary_size]))
+    loss = tf.reduce_mean(
+            tf.nn.nce_loss(nce_weights,
+                           nce_biases,
+                           embed,
+                           train_labels,
+                           num_sampled,
+                           vocabulary_size)
+    )
 
 
-    input_ids = train_inputs
-    labels = tf.reshape(train_labels, [batch_size])
-    # [vocabulary_size, emb_dim] - input vectors
-    input_vectors = tf.Variable(
-        tf.random_uniform([vocabulary_size, embedding_size], -1.0, 1.0),
-        name="input_vectors")
 
-    # [vocabulary_size, emb_dim] - output vectors
-    output_vectors = tf.Variable(
-        tf.random_uniform([vocabulary_size, embedding_size], -1.0, 1.0),
-        name="output_vectors")
-
-    # [batch_size, 1] - labels
-    labels_matrix = tf.reshape(
-        tf.cast(labels,
-                dtype=tf.int64),
-        [batch_size, 1])
-
-    # Negative sampling.
-    sampled_ids, _, _ = (tf.nn.fixed_unigram_candidate_sampler(
-        true_classes=labels_matrix,
-        num_true=1,
-        num_sampled=200,
-        unique=True,
-        range_max=vocabulary_size,
-        distortion=0.75,
-        unigrams=unigrams))
-
-    # [batch_size, emb_dim] - Input vectors for center words
-    center_vects = tf.nn.embedding_lookup(input_vectors, input_ids)
-    # [batch_size, emb_dim] - Output vectors for context words that
-    # (center_word, context_word) is in corpus
-    context_vects = tf.nn.embedding_lookup(output_vectors, labels)
-    # [num_sampled, emb_dim] - vector for sampled words that
-    # (center_word, sampled_word) probably isn't in corpus
-    sampled_vects = tf.nn.embedding_lookup(output_vectors, sampled_ids)
-    # compute logits for pairs of words that are in corpus
-    # [batch_size, 1]
-    incorpus_logits = tf.reduce_sum(tf.mul(center_vects, context_vects), 1)
-    incorpus_probabilities = tf.nn.sigmoid(incorpus_logits)
-
-    # Sampled logits: [batch_size, num_sampled]
-    # We replicate sampled noise labels for all examples in the batch
-    # using the matmul.
-    sampled_logits = tf.matmul(center_vects,
-                               sampled_vects,
-                               transpose_b=True)
-    outcorpus_probabilities = tf.nn.sigmoid(-sampled_logits)
-
-  # Compute the average NCE loss for the batch.
-  # tf.nce_loss automatically draws a new sample of the negative labels each
-  # time we evaluate the loss.
-  # [batch_size, 1]
-  outcorpus_loss_perexample = tf.reduce_sum(tf.log(outcorpus_probabilities), 1)
-  loss_perexample = - tf.log(incorpus_probabilities) - outcorpus_loss_perexample
-
-  loss =  tf.reduce_sum(loss_perexample) / batch_size
 
   # Construct the SGD optimizer using a learning rate of 0.4.
   optimizer = tf.train.GradientDescentOptimizer(.4).minimize(loss)
