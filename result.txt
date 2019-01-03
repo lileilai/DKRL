@@ -1,0 +1,81 @@
+/***
+
+	dkrl   cnn:transe  0.9 : 0.1    fb15k2   epoch 400  loss:2800
+
+**/
+l_raw_mean_rank 261.205 l_filter_mean_rank 173.413 l_raw_hit_10 0.32388 l_filter_hit_10 0.39155
+r_raw_mean_rank 206.270 r_filter_mean_rank 154.105 r_raw_hit_10 0.40488 r_filter_hit_10 0.47408
+/***
+
+	dkrl   cnn:transe  0.9 : 0.1    fb15k2  epoch 450
+
+**/
+l_raw_mean_rank 238.091 l_filter_mean_rank 130.514 l_raw_hit_10 0.35450 l_filter_hit_10 0.47447
+r_raw_mean_rank 182.837 r_filter_mean_rank 118.313 r_raw_hit_10 0.43714 r_filter_hit_10 0.54800
+
+
+
+/***
+
+	transe  fb15k2  我的代码
+
+
+l_raw_mean_rank 243.764 l_filter_mean_rank 123.633 l_raw_hit_10 0.47142 l_filter_hit_10 0.66642
+r_raw_mean_rank 203.061 r_filter_mean_rank 127.908 r_raw_hit_10 0.55256 r_filter_hit_10 0.73605
+
+
+	epoch : 600
+l_raw_mean_rank 219.953 l_filter_mean_rank 104.767 l_raw_hit_10 0.47062 l_filter_hit_10 0.66851
+r_raw_mean_rank 156.282 r_filter_mean_rank 89.684 r_raw_hit_10 0.55606 r_filter_hit_10 0.74468
+
+
+***/
+
+
+
+/***
+
+	ssp  epoch:400
+
+l_raw_mean_rank 282.190 l_filter_mean_rank 168.460 l_raw_hit_10 0.39638 l_filter_hit_10 0.53364
+r_raw_mean_rank 196.461 r_filter_mean_rank 129.669 r_raw_hit_10 0.47965 r_filter_hit_10 0.61500
+
+
+	ssp  epoch:600
+
+l_raw_mean_rank 277.843 l_filter_mean_rank 161.518 l_raw_hit_10 0.40558 l_filter_hit_10 0.55099
+r_raw_mean_rank 186.816 r_filter_mean_rank 120.198 r_raw_hit_10 0.48760 r_filter_hit_10 0.62789
+
+
+**/
+
+/**
+	ssp_joint_txt
+
+	r_raw_mean_rank: 176
+*/
+
+
+/**
+	ssp_joint_txt  epoch: 750
+	
+	l_raw_mean_rank 229.812 l_filter_mean_rank 117.668 l_raw_hit_10 0.37951 l_filter_hit_10 0.51285
+	r_raw_mean_rank 170.243 r_filter_mean_rank 104.263 r_raw_hit_10 0.46164 r_filter_hit_10 0.58770
+*/
+
+
+/***
+	
+	transe  fb15k2   OpenKE
+
+metric:			 MRR 		 MR 		 hit@10 	 hit@3  	 hit@1 
+l(raw):			 0.222577 	 255.882812 	 0.466239 	 0.254727 	 0.110980 
+r(raw):			 0.280041 	 154.073837 	 0.546563 	 0.320623 	 0.155961 
+averaged(raw):	 0.251309 	 204.978333 	 0.506401 	 0.287675 	 0.133471 
+
+l(filter):		 0.478701 	 83.573982 	 0.733785 	 0.565161 	 0.338045 
+r(filter):		 0.528904 	 52.640987 	 0.792502 	 0.622684 	 0.383752 
+averaged(filter):0.503802 	 68.107483 	 0.763144 	 0.593922 	 0.360898 
+
+***/
+
